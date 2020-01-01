@@ -9,19 +9,37 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <cstring>
 using namespace std;
 
 class map {
 private:
     char** grid;
     string source;
+    int width, height;
 
 public:
+    //Constructors
     map();
+    explicit map(const string & src);
     map(const map & src);
+
+    //Destructor
     virtual ~map();
-    bool loadMap(char* src);
+
+    //Accessors
+    int getWidth();
+    int getHeight();
+    string getSource();
+    char getTile(int x, int y);
+
+    //Utility methods
+    bool loadMap(const string & src);
     virtual void print();
+
+    //Operator overloads
+    map & operator=(const map & rhs);
 };
 
 
