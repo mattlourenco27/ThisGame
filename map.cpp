@@ -9,6 +9,7 @@ map::map() {
     source = "";
     width = 0;
     height = 0;
+    loaded = false;
 }
 
 map::map(const string & src) {
@@ -16,10 +17,11 @@ map::map(const string & src) {
     source = "";
     width = 0;
     height = 0;
-    loadMap(src);
+    if(!loadMap(src)) loaded = false;
 }
 
 map::map(const map & src) {
+    loaded = src.loaded;
     width = src.width;
     height = src.height;
     source = src.source;
@@ -37,10 +39,15 @@ map::~map() {
     }
 }
 
+bool map::getLoaded() {return loaded;}
 int map::getWidth() {return width;}
 int map::getHeight() {return height;}
 string map::getSource() {return source;}
-char map::getTile(int x, int y) {return grid[y][x];}
+char map::getTile(int x, int y) {
+    if(0 <= x && x < width && 0 <= y && y < height) {
+        return grid[y][x];
+    }
+}
 
 bool map::loadMap(const string & src) {
     ifstream f(src); //open map file
@@ -61,6 +68,9 @@ bool map::loadMap(const string & src) {
             f.close();
             return false;
         }
+    } else {
+        f.close();
+        return false;
     }
 
     //verify that the new map is valid before updating the current map
@@ -85,11 +95,11 @@ bool map::loadMap(const string & src) {
     }
 
     if(!f.eof()) validMap = false; //if the map has not been saved in its entirety, it is not valid
+    f.close();
 
     if(!validMap) {
         for(int i = 0; i < tmpHeight; ++i) delete [] tmpGrid[i];
         delete [] tmpGrid;
-        f.close();
         return false;
     }
 
@@ -102,13 +112,17 @@ bool map::loadMap(const string & src) {
     width = tmpWidth;
     height = tmpHeight;
     source = src;
+    loaded = true;
     return true;
 }
 
 void map::print() {
+    if(!loaded) cout << "Map is not loaded" << endl;
     cout << "Width: " << width << ", Height: " << height << endl
          << "Source: " << source << endl;
-    cout << grid;
+    for(int i = 0; i < height; ++i) {
+        printf("%s\n", grid[i]);
+    }
 }
 
 map & map::operator=(const map & rhs) {

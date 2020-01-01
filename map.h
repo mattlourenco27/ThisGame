@@ -18,6 +18,7 @@ private:
     char** grid;
     string source;
     int width, height;
+    bool loaded;
 
 public:
     //Constructors
@@ -29,6 +30,7 @@ public:
     virtual ~map();
 
     //Accessors
+    bool getLoaded();
     int getWidth();
     int getHeight();
     string getSource();
