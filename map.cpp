@@ -68,6 +68,11 @@ bool map::loadMap(const string & src) {
             f.close();
             return false;
         }
+
+        if(tmpWidth > 4095 || tmpHeight > 4095) {
+            f.close();
+            return false;
+        }
     } else {
         f.close();
         return false;

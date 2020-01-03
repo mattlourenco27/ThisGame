@@ -15,10 +15,12 @@ using namespace std;
 
 class map {
 private:
-    char** grid;
     string source;
-    int width, height;
     bool loaded;
+
+protected:
+    char** grid;
+    unsigned short width, height;
 
 public:
     //Constructors
@@ -34,7 +36,7 @@ public:
     int getWidth();
     int getHeight();
     string getSource();
-    char getTile(int x, int y);
+    char getTile(unsigned short x, unsigned short y);
 
     //Utility methods
     bool loadMap(const string & src);
