@@ -7,8 +7,8 @@
 // Changed to a linked map type structure and changed name
 //
 
-#ifndef THISGAME_MAP_H
-#define THISGAME_MAP_H
+#ifndef THISGAME_LINKEDMAP_H
+#define THISGAME_LINKEDMAP_H
 
 #include "tileNode.h"
 #define MAX_X 4095
@@ -48,4 +48,4 @@ public:
 };
 
 
-#endif //THISGAME_MAP_H
+#endif //THISGAME_LINKEDMAP_H
