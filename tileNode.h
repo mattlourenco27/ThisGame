@@ -12,10 +12,12 @@ class tileNode {
 private:
     char tile;
     tileNode *top, *bottom, *left, *right;
+    unsigned short x, y; //coordinates
 public:
     //Constructors & destructor
     tileNode();
-    tileNode(char _tile);
+    explicit tileNode(char _tile);
+    tileNode(unsigned short x, unsigned short y, char _tile);
     tileNode(const tileNode & src);
     ~tileNode();
 
@@ -25,6 +27,8 @@ public:
     tileNode *getBottom();
     tileNode *getLeft();
     tileNode *getRight();
+    unsigned short getX();
+    unsigned short getY();
 
     //Mutators
     void setTile(char _tile);
@@ -32,10 +36,18 @@ public:
     tileNode *setBottom(tileNode *ptr);
     tileNode *setLeft(tileNode *ptr);
     tileNode *setRight(tileNode *ptr);
+    void setX(unsigned short _x);
+    void setY(unsigned short _y);
 
     //Utility methods
+    void connectTop(tileNode *ptr);
+    void connectBottom(tileNode *ptr);
+    void connectLeft(tileNode *ptr);
+    void connectRight(tileNode *ptr);
     void disconnect();
     void print();
+
+    friend ostream & operator<<(ostream & out, const tileNode & rhs);
 };
 
 

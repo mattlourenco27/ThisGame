@@ -10,10 +10,12 @@ tileNode::tileNode() {
     bottom = nullptr;
     left = nullptr;
     right = nullptr;
+    x = 0;
+    y = 0;
 }
 
 tileNode::tileNode(char _tile) {
-    if(_tile != ' ' && _tile != '\t' && _tile != '\n') {
+    if(_tile != '\t' && _tile != '\n' && _tile != '\0') {
         tile = _tile;
     } else {
         tile = '*';
@@ -22,6 +24,22 @@ tileNode::tileNode(char _tile) {
     bottom = nullptr;
     left = nullptr;
     right = nullptr;
+    x = 0;
+    y = 0;
+}
+
+tileNode::tileNode(unsigned short _x, unsigned short _y, char _tile) {
+    if(_tile != '\t' && _tile != '\n' && _tile != '\0') {
+        tile = _tile;
+    } else {
+        tile = '*';
+    }
+    top = nullptr;
+    bottom = nullptr;
+    left = nullptr;
+    right = nullptr;
+    x = _x;
+    y = _y;
 }
 
 tileNode::tileNode(const tileNode & src) {
@@ -30,6 +48,8 @@ tileNode::tileNode(const tileNode & src) {
     bottom = nullptr;
     left = nullptr;
     right = nullptr;
+    x = src.x;
+    y = src.y;
 }
 
 tileNode::~tileNode() {
@@ -44,9 +64,11 @@ tileNode *tileNode::getTop() {return top;}
 tileNode *tileNode::getBottom() {return bottom;}
 tileNode *tileNode::getLeft() {return left;}
 tileNode *tileNode::getRight() {return right;}
+unsigned short tileNode::getX() {return x;}
+unsigned short tileNode::getY() {return y;}
 
 void tileNode::setTile(char _tile) {
-    if(_tile != ' ' && _tile != '\t' && _tile != '\n') {
+    if(_tile != '\t' && _tile != '\n' && _tile != '\0') {
         tile = _tile;
     }
 }
@@ -75,6 +97,34 @@ tileNode *tileNode::setRight(tileNode *ptr) {
     return tmp;
 }
 
+void tileNode::setX(unsigned short _x) {
+    x = _x;
+}
+
+void tileNode::setY(unsigned short _y) {
+    y =_y;
+}
+
+void tileNode::connectTop(tileNode *ptr) {
+    top = ptr;
+    if(ptr) ptr->bottom = this;
+}
+
+void tileNode::connectBottom(tileNode *ptr) {
+    bottom = ptr;
+    if(ptr) ptr->top = this;
+}
+
+void tileNode::connectLeft(tileNode *ptr) {
+    left = ptr;
+    if(ptr) ptr->right = this;
+}
+
+void tileNode::connectRight(tileNode *ptr) {
+    right = ptr;
+    if(ptr) ptr->left = this;
+}
+
 void tileNode::disconnect() {
     top = nullptr;
     bottom = nullptr;
@@ -83,5 +133,11 @@ void tileNode::disconnect() {
 }
 
 void tileNode::print() {
-    cout << tile;
+    cout << "Symbol: " << tile << endl
+         << "x: " << x << ", y: " << y << endl;
+}
+
+ostream & operator<<(ostream & out, const tileNode & rhs) {
+    out << rhs.tile;
+    return out;
 }

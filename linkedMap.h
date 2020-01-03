@@ -1,22 +1,20 @@
 //
 // Created by Matthew Lourenco on 01/01/2020.
 //
-// This class loads a valid map file
+// This class loads a valid txt file into a linkedMap
+//
+// Editted by Matthew Lourenco on 03/01/2020
+// Changed to a linked map type structure and changed name
 //
 
 #ifndef THISGAME_MAP_H
 #define THISGAME_MAP_H
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cstring>
-
 #include "tileNode.h"
+#define MAX_X 4095
+#define MAX_Y 4095
 
-using namespace std;
-
-class map {
+class linkedMap {
 private:
     string source;
     bool loaded;
@@ -29,24 +27,24 @@ protected:
 
 public:
     //Constructors
-    map();
-    explicit map(const string & src);
-    map(const map & src);
+    linkedMap();
+    explicit linkedMap(const string & src);
+    linkedMap(const linkedMap & src);
 
     //Destructor
-    virtual ~map();
+    virtual ~linkedMap();
 
     //Accessors
     bool getLoaded();
     string getSource();
-    char getTile(unsigned short x, unsigned short y);
 
     //Utility methods
     bool loadMap(const string & src);
+    void unloadMap();
     virtual void print();
 
     //Operator overloads
-    map & operator=(const map & rhs);
+    linkedMap & operator=(const linkedMap & rhs);
 };
 
 
