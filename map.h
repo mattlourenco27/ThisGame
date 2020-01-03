@@ -11,6 +11,9 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
+
+#include "tileNode.h"
+
 using namespace std;
 
 class map {
@@ -19,8 +22,10 @@ private:
     bool loaded;
 
 protected:
-    char** grid;
-    unsigned short width, height;
+    tileNode *topLeft;
+    tileNode *topRight;
+    tileNode *bottomLeft;
+    tileNode* bottomRight;
 
 public:
     //Constructors
@@ -33,8 +38,6 @@ public:
 
     //Accessors
     bool getLoaded();
-    int getWidth();
-    int getHeight();
     string getSource();
     char getTile(unsigned short x, unsigned short y);
 

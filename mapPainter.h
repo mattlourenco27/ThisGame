@@ -8,17 +8,33 @@
 #include "map.h"
 
 class mapPainter: public map {
+protected:
+    string destination;
 public:
     //Constructors & Destructor
     mapPainter();
     mapPainter(string src);
-    mapPainter(map src);
-    ~mapPainter();
+    mapPainter(const mapPainter & src);
+    virtual ~mapPainter();
+
+    //Accessors and Mutators
+    string getDest();
+    void setDest(string dest);
+    bool setWidth(unsigned short _width);
+    bool setHeight(unsigned short _height);
 
     //Utility methods
-    bool drawRect(int x1, int y1, int x2, int y2);
-    bool drawLine(int x1, int y1, int x2, int y2);
-    bool drawPoint(int x, int y);
+    bool drawRect(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2,
+                  char fill, bool hollow = false);
+    bool drawLine(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, char fill);
+    bool drawPoint(unsigned short x, unsigned short y, char fill);
+
+    void newMap();
+    bool save(string dest);
+    bool save();
+
+    //Operator overloads
+    mapPainter & operator=(const mapPainter & rhs);
 };
 
 

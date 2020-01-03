@@ -5,25 +5,25 @@
 #include "map.h"
 
 map::map() {
-    grid = nullptr;
+    topLeft = nullptr;
+    topRight = nullptr;
+    bottomLeft = nullptr;
+    bottomRight = nullptr;
     source = "";
-    width = 0;
-    height = 0;
     loaded = false;
 }
 
 map::map(const string & src) {
-    grid = nullptr;
+    topLeft = nullptr;
+    topRight = nullptr;
+    bottomLeft = nullptr;
+    bottomRight = nullptr;
     source = "";
-    width = 0;
-    height = 0;
     if(!loadMap(src)) loaded = false;
 }
 
 map::map(const map & src) {
     loaded = src.loaded;
-    width = src.width;
-    height = src.height;
     source = src.source;
     grid = new char*[height];
     for(int i = 0; i < height; ++i) {
@@ -40,10 +40,8 @@ map::~map() {
 }
 
 bool map::getLoaded() {return loaded;}
-int map::getWidth() {return width;}
-int map::getHeight() {return height;}
 string map::getSource() {return source;}
-char map::getTile(int x, int y) {
+char map::getTile(unsigned short x, unsigned short y) {
     if(0 <= x && x < width && 0 <= y && y < height) {
         return grid[y][x];
     }
