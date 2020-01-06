@@ -8,6 +8,8 @@
 #define THISGAME_ARRAYMAP_H
 
 #include <iostream>
+#define MAX_X 4095
+#define MAX_Y 4095
 
 using namespace std;
 
@@ -17,6 +19,8 @@ private:
     string source;
     int width, height;
     bool loaded;
+
+    void getNextLine(ifstream & file, string & line);
 
 public:
     //Constructors

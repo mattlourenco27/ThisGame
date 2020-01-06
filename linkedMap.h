@@ -28,7 +28,7 @@ protected:
 public:
     //Constructors
     linkedMap();
-    explicit linkedMap(const string & src);
+    linkedMap(const string & src);
     linkedMap(const linkedMap & src);
 
     //Destructor

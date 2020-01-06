@@ -93,6 +93,7 @@ bool linkedMap::loadMap(const string & src) {
     if(!f.is_open()) return false;
 
     unsigned short width = 0;
+    unsigned short height = 0;
     string nextLine;
 
     if(f.eof()) { // Check if map has a height of 1 or more
@@ -102,14 +103,20 @@ bool linkedMap::loadMap(const string & src) {
 
     //Check that new map is rectangular and without '\t' characters
     getline(f, nextLine);
+    height++;
     width = nextLine.length();
     if(width == 0 || width > MAX_X) {
+        f.close();
+        return false;
+    }
+    if(regex_match(nextLine, regex("\t"))) {
         f.close();
         return false;
     }
 
     while(!f.eof()) {
         getline(f, nextLine);
+        height++;
         if(nextLine.length() != width) {
             f.close();
             return false;
@@ -118,6 +125,11 @@ bool linkedMap::loadMap(const string & src) {
             f.close();
             return false;
         }
+    }
+
+    if(height > MAX_Y) {
+        f.close();
+        return false;
     }
 
     //At this point the map is rectangular and all characters are 'valid'

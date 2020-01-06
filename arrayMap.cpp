@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <cstring>
+#include <regex>
 
 #include "arrayMap.h"
 
@@ -34,7 +34,7 @@ arrayMap::arrayMap(const arrayMap & src) {
     source = src.source;
     grid = new char*[height];
     for(int i = 0; i < height; ++i) {
-        grid[i] = new char[width];
+        grid[i] = new char[width + 1];
         strcpy(grid[i], src.grid[i]);
     }
 }
@@ -56,68 +56,85 @@ char arrayMap::getTile(int x, int y) {
     }
 }
 
+void arrayMap::getNextLine(ifstream & file, string & line) {
+    getline(file, line);
+    if(line.length() > 0) {
+        if(line[line.length() - 1] == '\r') {
+            line.pop_back();
+        }
+    }
+}
+
 bool arrayMap::loadMap(const string & src) {
     ifstream f(src); //open map file
     if(!f.is_open()) return false;
 
     int tmpWidth = 0;
     int tmpHeight = 0;
-    char** tmpGrid;
     string nextLine;
 
-    if(!f.eof()) { //Retrieve data from header and use error checking
-        //check first line of map for width and height
-        getline(f, nextLine);
-        stringstream dataStream(nextLine);
-        dataStream >> tmpWidth >> tmpHeight;
-
-        if(dataStream.fail()) {
+    if(!f.eof()) {
+        //check first line of map for width
+        getNextLine(f, nextLine);
+        tmpWidth = nextLine.length();
+        if(tmpWidth == 0 || tmpWidth > MAX_X) {
             f.close();
             return false;
         }
+        if(regex_match(nextLine, regex("\t"))) {
+            f.close();
+            return false;
+        }
+        tmpHeight++;
     } else {
         f.close();
         return false;
     }
 
-    //verify that the new map is valid before updating the current map
-    tmpGrid = new char*[tmpHeight];
-    for(int i = 0; i < tmpHeight; ++i) tmpGrid[i] = new char[tmpWidth];
-
-    bool validMap = true;
-    for(int i = 0; i < tmpHeight; ++i) { //copy map contents
-        if(f.eof()) { //check if the map is not tall enough
-            validMap = false;
-            break;
+    while(!f.eof()) {
+        getNextLine(f, nextLine);
+        tmpHeight++;
+        if(nextLine.length() != tmpWidth) {
+            f.close();
+            return false;
         }
-
-        getline(f, nextLine);
-
-        if(nextLine.length() != tmpWidth) { //check if the map is correct width
-            validMap = false;
-            break;
+        if(regex_match(nextLine, regex("\t"))) {
+            f.close();
+            return false;
         }
-
-        strcpy(tmpGrid[i], nextLine.c_str());
     }
 
-    if(!f.eof()) validMap = false; //if the map has not been saved in its entirety, it is not valid
-    f.close();
-
-    if(!validMap) {
-        for(int i = 0; i < tmpHeight; ++i) delete [] tmpGrid[i];
-        delete [] tmpGrid;
+    if(tmpHeight > MAX_Y) {
+        f.close();
         return false;
     }
 
-    //current map is valid so delete old map and replace it
+    //After these tests, the map is valid
+    //Return the file stream to the beginning
+    f.clear();
+    f.seekg(0, ios::beg);
+
+    //new map is valid so delete old map and replace it
     if(grid) {
         for(int i = 0; i < height; ++i) delete [] grid[i];
         delete [] grid;
     }
-    grid = tmpGrid;
+
     width = tmpWidth;
     height = tmpHeight;
+
+    grid = new char*[height];
+    for(int i = 0; i < height; ++i) {
+        grid[i] = new char[width + 1];
+    }
+
+    for(int i = 0; i < height; ++i) { //copy map contents
+        getNextLine(f, nextLine);
+        strcpy(grid[i], nextLine.c_str());
+    }
+
+    f.clear();
+    f.close();
     source = src;
     loaded = true;
     return true;
@@ -134,12 +151,16 @@ void arrayMap::print() {
 
 arrayMap & arrayMap::operator=(const arrayMap & rhs) {
     if(this == &rhs) return *this;
+    if(grid) {
+        for(int i = 0; i < height; ++i) delete [] grid[i];
+        delete [] grid;
+    }
     width = rhs.width;
     height = rhs.height;
     source = rhs.source;
     grid = new char*[height];
     for(int i = 0; i < height; ++i) {
-        grid[i] = new char[width];
+        grid[i] = new char[width + 1];
         strcpy(grid[i], rhs.grid[i]);
     }
     return *this;
