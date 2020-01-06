@@ -11,6 +11,7 @@
 #define THISGAME_LINKEDMAP_H
 
 #include "tileNode.h"
+#include "arrayMap.h"
 #define MAX_X 4095
 #define MAX_Y 4095
 
@@ -23,12 +24,12 @@ protected:
     tileNode *topLeft;
     tileNode *topRight;
     tileNode *bottomLeft;
-    tileNode* bottomRight;
+    tileNode *bottomRight;
 
 public:
     //Constructors
     linkedMap();
-    linkedMap(const string & src);
+    explicit linkedMap(const string & src);
     linkedMap(const linkedMap & src);
 
     //Destructor
@@ -37,6 +38,9 @@ public:
     //Accessors
     bool getLoaded();
     string getSource();
+    int getWidth();
+    int getHeight();
+    char getTile(int x, int y);
 
     //Utility methods
     bool loadMap(const string & src);
@@ -45,6 +49,8 @@ public:
 
     //Operator overloads
     linkedMap & operator=(const linkedMap & rhs);
+    linkedMap & operator=(const arrayMap & rhs);
+    friend arrayMap & operator=(const arrayMap & rhs, const linkedMap & rhs);
 };
 
 

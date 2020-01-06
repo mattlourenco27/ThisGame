@@ -62,11 +62,11 @@ int main() {
     cout << "Tile [6][1]: " << a.getTile(6, 1) << endl;
 
     cout << endl << "Testing second constructor (testmap1)" << endl;
-    arrayMap b(TESTMAP1);
+    linkedMap b(TESTMAP1);
     b.print();
 
     cout << endl << "Testing copy constructor" << endl;
-    arrayMap c(b);
+    linkedMap c(b);
     c.print();
 
     cout << endl << "Testing operator=" << endl;
