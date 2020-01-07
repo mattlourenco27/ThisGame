@@ -5,15 +5,15 @@
 #include "mapPainter.h"
 
 //Constructors & Destructor
-mapPainter::mapPainter():map() {
+mapPainter::mapPainter():linkedMap() {
     destination = "";
 }
 
-mapPainter::mapPainter(string src): map(src) {
+mapPainter::mapPainter(string src): linkedMap(src) {
     destination = "";
 }
 
-mapPainter::mapPainter(const mapPainter & src): map(src) {
+mapPainter::mapPainter(const mapPainter & src): linkedMap(src) {
     destination = src.destination;
 }
 

@@ -11,7 +11,6 @@
 #define THISGAME_LINKEDMAP_H
 
 #include "tileNode.h"
-#include "arrayMap.h"
 #define MAX_X 4095
 #define MAX_Y 4095
 
@@ -47,11 +46,9 @@ public:
     bool loadMap(const string & src);
     void unloadMap();
     virtual void print();
-    //arrayMap toArrayMap();
 
     //Operator overloads
     linkedMap & operator=(const linkedMap & rhs);
-    //linkedMap & operator=(const arrayMap & rhs);
 };
 
 #endif //THISGAME_LINKEDMAP_H

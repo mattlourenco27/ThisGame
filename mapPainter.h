@@ -5,15 +5,15 @@
 #ifndef THISGAME_MAPPAINTER_H
 #define THISGAME_MAPPAINTER_H
 
-#include "map.h"
+#include "linkedMap.h"
 
-class mapPainter: public map {
+class mapPainter: public linkedMap {
 protected:
     string destination;
 public:
     //Constructors & Destructor
     mapPainter();
-    mapPainter(string src);
+    explicit mapPainter(string src);
     mapPainter(const mapPainter & src);
     virtual ~mapPainter();
 

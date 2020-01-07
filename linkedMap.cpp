@@ -207,7 +207,6 @@ bool linkedMap::loadMap(const string & src) {
     while(!f.eof()) {
         getNextLine(f, nextLine);
         dataStream.clear();
-        //dataStream.ignore(1000, '\n');
         dataStream.str(nextLine);
 
         dataStream >> tile;
