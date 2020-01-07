@@ -87,6 +87,50 @@ linkedMap::~linkedMap() {
 
 bool linkedMap::getLoaded() {return loaded;}
 string linkedMap::getSource() {return source;}
+int linkedMap::getWidth() {
+    return (topRight->getX() - topLeft->getX() + 1);
+}
+
+int linkedMap::getHeight() {
+    return (bottomLeft->getY() - topLeft->getY() + 1);
+}
+char linkedMap::getTile(int x, int y) {
+    if(x < 0 || x > (getWidth() - 1) || y < 0 || y > (getHeight() - 1)) return '\0';
+
+    tileNode *p = nullptr;
+
+    if((topRight->getX() - x) < x) {
+        if((bottomLeft->getY() - y) < y) {
+            p = bottomRight;
+        } else {
+            p = topRight;
+        }
+    } else {
+        if((bottomLeft->getY() - y) < y) {
+            p = bottomLeft;
+        } else {
+            p = topLeft;
+        }
+    }
+
+    while(p->getX() != x && p->getY() != y) {
+        if(p->getX() > x) p = p->getLeft();
+        else if(p->getX() < x) p = p->getRight();
+        if(p->getY() > y) p = p->getTop();
+        else if(p->getY() < y) p = p->getBottom();
+    }
+
+    return p->getTile();
+}
+
+void linkedMap::getNextLine(ifstream & file, string & line) {
+    getline(file, line);
+    if(line.length() > 0) {
+        if(line[line.length() - 1] == '\r') {
+            line.pop_back();
+        }
+    }
+}
 
 bool linkedMap::loadMap(const string & src) {
     ifstream f(src); //open map file
@@ -102,7 +146,7 @@ bool linkedMap::loadMap(const string & src) {
     }
 
     //Check that new map is rectangular and without '\t' characters
-    getline(f, nextLine);
+    getNextLine(f, nextLine);
     height++;
     width = nextLine.length();
     if(width == 0 || width > MAX_X) {
@@ -115,7 +159,7 @@ bool linkedMap::loadMap(const string & src) {
     }
 
     while(!f.eof()) {
-        getline(f, nextLine);
+        getNextLine(f, nextLine);
         height++;
         if(nextLine.length() != width) {
             f.close();
@@ -146,7 +190,7 @@ bool linkedMap::loadMap(const string & src) {
     char tile;
 
     //First set up top row of map
-    getline(f, nextLine);
+    getNextLine(f, nextLine);
     stringstream dataStream(nextLine);
     dataStream >> tile;
     topLeft = new tileNode(x++, y, tile);
@@ -161,10 +205,10 @@ bool linkedMap::loadMap(const string & src) {
 
     //then set up the rest of the rows
     while(!f.eof()) {
-        getline(f, nextLine);
+        getNextLine(f, nextLine);
         dataStream.clear();
-        dataStream.ignore(1000, '\n');
-        dataStream << nextLine;
+        //dataStream.ignore(1000, '\n');
+        dataStream.str(nextLine);
 
         dataStream >> tile;
         x = 0;
@@ -218,6 +262,7 @@ void linkedMap::print() {
             cout << *p;
             p = p->getRight();
         }
+        cout << endl;
         p = row;
     }
 }

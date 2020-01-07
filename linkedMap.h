@@ -19,6 +19,7 @@ class linkedMap {
 private:
     string source;
     bool loaded;
+    void getNextLine(ifstream & file, string & line);
 
 protected:
     tileNode *topLeft;
@@ -46,12 +47,11 @@ public:
     bool loadMap(const string & src);
     void unloadMap();
     virtual void print();
+    //arrayMap toArrayMap();
 
     //Operator overloads
     linkedMap & operator=(const linkedMap & rhs);
-    linkedMap & operator=(const arrayMap & rhs);
-    friend arrayMap & operator=(const arrayMap & rhs, const linkedMap & rhs);
+    //linkedMap & operator=(const arrayMap & rhs);
 };
-
 
 #endif //THISGAME_LINKEDMAP_H
