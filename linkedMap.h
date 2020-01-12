@@ -26,6 +26,8 @@ protected:
     tileNode *bottomLeft;
     tileNode *bottomRight;
 
+    tileNode *getNode(unsigned short x, unsigned short y);
+
 public:
     //Constructors
     linkedMap();
@@ -40,7 +42,7 @@ public:
     string getSource();
     int getWidth();
     int getHeight();
-    char getTile(int x, int y);
+    char getTile(unsigned short x, unsigned short y);
 
     //Utility methods
     bool loadMap(const string & src);

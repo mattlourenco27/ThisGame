@@ -5,7 +5,7 @@
 #include "tileNode.h"
 
 tileNode::tileNode() {
-    tile = '*';
+    tile = DEFAULT_TILE;
     top = nullptr;
     bottom = nullptr;
     left = nullptr;
@@ -18,7 +18,7 @@ tileNode::tileNode(char _tile) {
     if(_tile != '\t' && _tile != '\n' && _tile != '\0') {
         tile = _tile;
     } else {
-        tile = '*';
+        tile = DEFAULT_TILE;
     }
     top = nullptr;
     bottom = nullptr;
@@ -28,11 +28,21 @@ tileNode::tileNode(char _tile) {
     y = 0;
 }
 
+tileNode::tileNode(unsigned short _x, unsigned short _y) {
+    tile = DEFAULT_TILE;
+    top = nullptr;
+    bottom = nullptr;
+    left = nullptr;
+    right = nullptr;
+    x = _x;
+    y = _y;
+}
+
 tileNode::tileNode(unsigned short _x, unsigned short _y, char _tile) {
     if(_tile != '\t' && _tile != '\n' && _tile != '\0') {
         tile = _tile;
     } else {
-        tile = '*';
+        tile = DEFAULT_TILE;
     }
     top = nullptr;
     bottom = nullptr;

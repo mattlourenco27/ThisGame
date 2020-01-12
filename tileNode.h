@@ -6,6 +6,9 @@
 #define THISGAME_TILENODE_H
 
 #include <iostream>
+
+#define DEFAULT_TILE '*'
+
 using namespace std;
 
 class tileNode {
@@ -17,7 +20,8 @@ public:
     //Constructors & destructor
     tileNode();
     explicit tileNode(char _tile);
-    tileNode(unsigned short x, unsigned short y, char _tile);
+    tileNode(unsigned short _x, unsigned short _y);
+    tileNode(unsigned short _x, unsigned short _y, char _tile);
     tileNode(const tileNode & src);
     ~tileNode();
 

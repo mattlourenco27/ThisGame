@@ -94,8 +94,9 @@ int linkedMap::getWidth() {
 int linkedMap::getHeight() {
     return (bottomLeft->getY() - topLeft->getY() + 1);
 }
-char linkedMap::getTile(int x, int y) {
-    if(x < 0 || x > (getWidth() - 1) || y < 0 || y > (getHeight() - 1)) return '\0';
+
+tileNode *linkedMap::getNode(unsigned short x, unsigned short y) {
+    if(x >= getWidth() || y >= getHeight()) return nullptr;
 
     tileNode *p = nullptr;
 
@@ -120,7 +121,13 @@ char linkedMap::getTile(int x, int y) {
         else if(p->getY() < y) p = p->getBottom();
     }
 
-    return p->getTile();
+    return p;
+}
+
+char linkedMap::getTile(unsigned short x, unsigned short y) {
+    tileNode *p = getNode(x, y);
+    if(p) return p->getTile();
+    else return '\0';
 }
 
 void linkedMap::getNextLine(ifstream & file, string & line) {

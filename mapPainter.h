@@ -13,9 +13,9 @@ protected:
 public:
     //Constructors & Destructor
     mapPainter();
-    explicit mapPainter(string src);
+    explicit mapPainter(const string & src);
     mapPainter(const mapPainter & src);
-    virtual ~mapPainter();
+    ~mapPainter() override;
 
     //Accessors and Mutators
     string getDest();
