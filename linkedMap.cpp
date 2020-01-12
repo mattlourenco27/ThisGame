@@ -114,14 +114,20 @@ tileNode *linkedMap::getNode(unsigned short x, unsigned short y) {
         }
     }
 
+    return getNodefrom(x, y, p);
+}
+
+tileNode *getNodefrom(unsigned short x, unsigned short y, tileNode *start) {
+    if(!start) return nullptr;
+
+    tileNode *p = start;
+
     while(p->getX() != x && p->getY() != y) {
         if(p->getX() > x) p = p->getLeft();
         else if(p->getX() < x) p = p->getRight();
         if(p->getY() > y) p = p->getTop();
         else if(p->getY() < y) p = p->getBottom();
     }
-
-    return p;
 }
 
 char linkedMap::getTile(unsigned short x, unsigned short y) {

@@ -19,7 +19,7 @@ public:
 
     //Accessors and Mutators
     string getDest();
-    void setDest(string dest);
+    void setDest(const string & dest);
     bool setWidth(unsigned short _width);
     bool setHeight(unsigned short _height);
 

@@ -27,6 +27,7 @@ protected:
     tileNode *bottomRight;
 
     tileNode *getNode(unsigned short x, unsigned short y);
+    tileNode *getNodefrom(unsigned short x, unsigned short y, tileNode *start);
 
 public:
     //Constructors
