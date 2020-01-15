@@ -163,12 +163,12 @@ bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x
 
         if(x1 > x2) { //Case where starting point is further right than ending point
             for(int i = x2; i <= x1; i++) {
-                p = getNodefrom(i, round(y2 + slope*(i - x2)), p);
+                p = getNodeFrom(i, round(y2 + slope*(i - x2)), p);
                 p->setTile(fill);
             }
         } else {
             for(int i = x1; i <= x2; i++) {
-                p = getNodefrom(i, round(y1 + slope*(i - x1)), p);
+                p = getNodeFrom(i, round(y1 + slope*(i - x1)), p);
                 p->setTile(fill);
             }
         }
@@ -177,12 +177,12 @@ bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x
 
         if(y1 > y2) { //Case where starting point is further down than ending point
             for(int i = y2; i <= y1; i++) {
-                p = getNodefrom(round(x2 + slope*(i - y2)), i, p);
+                p = getNodeFrom(round(x2 + slope*(i - y2)), i, p);
                 p->setTile(fill);
             }
         } else {
             for(int i = y1; i <= y2; i++) {
-                p = getNodefrom(round(x1 + slope*(i - y1)), i, p);
+                p = getNodeFrom(round(x1 + slope*(i - y1)), i, p);
                 p->setTile(fill);
             }
         }
@@ -198,6 +198,10 @@ bool mapPainter::drawPoint(unsigned short x, unsigned short y, char fill) {
     return true;
 }
 
-void mapPainter::newMap();
+void mapPainter::newMap() {
+    if(getLoaded()) save();
+    unloadMap();
+
+}
 bool mapPainter::save(string dest);
 bool mapPainter::save();
