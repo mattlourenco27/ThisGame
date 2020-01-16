@@ -3,15 +3,26 @@
 //
 
 #include <cmath>
+#include <fstream>
 #include "mapPainter.h"
+
+#if defined(unix) || defined(__unix__) || defined(__unix)
+#define PLATFORM_UNIX
+#endif
 
 //Constructors & Destructor
 mapPainter::mapPainter():linkedMap() {
     destination = "";
 }
 
-mapPainter::mapPainter(const string & src): linkedMap(src) {
+mapPainter::mapPainter(const string & src):linkedMap(src) {
     destination = "";
+}
+
+mapPainter::mapPainter(unsigned short _width, unsigned short _height):linkedMap() {
+    destination = "";
+    setWidth(_width);
+    setHeight(_height);
 }
 
 mapPainter::mapPainter(const mapPainter & src): linkedMap(src) {
@@ -30,6 +41,13 @@ void mapPainter::setDest(const string & dest) {
 bool mapPainter::setWidth(unsigned short _width) {
     if(_width > MAX_X) return false;
     if(_width < 1) return false;
+
+    if(!getLoaded()) {
+        topLeft = new tileNode(0, 0);
+        topRight = topLeft;
+        bottomLeft = topLeft;
+        bottomRight = topLeft;
+    }
 
     //Determine if columns must be added or subtracted
     int diff = _width - getWidth();
@@ -69,6 +87,13 @@ bool mapPainter::setWidth(unsigned short _width) {
 bool mapPainter::setHeight(unsigned short _height) {
     if(_height > MAX_Y) return false;
     if(_height < 1) return false;
+
+    if(!getLoaded()) {
+        topLeft = new tileNode(0, 0);
+        topRight = topLeft;
+        bottomLeft = topLeft;
+        bottomRight = topLeft;
+    }
 
     //Determine if rows must be added or subtracted
     int diff = _height - getHeight();
@@ -163,12 +188,12 @@ bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x
 
         if(x1 > x2) { //Case where starting point is further right than ending point
             for(int i = x2; i <= x1; i++) {
-                p = getNodeFrom(i, round(y2 + slope*(i - x2)), p);
+                p = getNodeFrom(i, (short) round(y2 + slope*(i - x2)), p);
                 p->setTile(fill);
             }
         } else {
             for(int i = x1; i <= x2; i++) {
-                p = getNodeFrom(i, round(y1 + slope*(i - x1)), p);
+                p = getNodeFrom(i, (short) round(y1 + slope*(i - x1)), p);
                 p->setTile(fill);
             }
         }
@@ -177,12 +202,12 @@ bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x
 
         if(y1 > y2) { //Case where starting point is further down than ending point
             for(int i = y2; i <= y1; i++) {
-                p = getNodeFrom(round(x2 + slope*(i - y2)), i, p);
+                p = getNodeFrom((short) round(x2 + slope*(i - y2)), i, p);
                 p->setTile(fill);
             }
         } else {
             for(int i = y1; i <= y2; i++) {
-                p = getNodeFrom(round(x1 + slope*(i - y1)), i, p);
+                p = getNodeFrom((short) round(x1 + slope*(i - y1)), i, p);
                 p->setTile(fill);
             }
         }
@@ -201,7 +226,35 @@ bool mapPainter::drawPoint(unsigned short x, unsigned short y, char fill) {
 void mapPainter::newMap() {
     if(getLoaded()) save();
     unloadMap();
-
+    destination = "";
 }
-bool mapPainter::save(string dest);
-bool mapPainter::save();
+
+bool mapPainter::save(const string & dest) {
+    ofstream of(dest, ofstream::trunc); //Open the destination file and remove any previous contents
+    if(!of.is_open()) return false;
+
+    //Traverse the linkedMap and add the nodes to the open txt file
+    tileNode *p = topLeft;
+    tileNode *row = topLeft;
+    while(row) {
+        row = row->getBottom();
+        while(p) {
+            of << p->getTile();
+            p = p->getRight();
+        }
+#if defined(_WIN32)
+        of << "\r\n";
+#elif defined(PLATFORM_UNIX)
+        of << "\n";
+#endif
+        p = row;
+    }
+
+    of.close();
+    return true;
+}
+
+bool mapPainter::save() {
+    if(destination.empty()) destination = string("../maps/") + DEFAULT_FILE_NAME;
+    return save(destination);
+}

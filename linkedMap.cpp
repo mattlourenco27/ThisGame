@@ -7,10 +7,13 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <regex>
 
 #include "linkedMap.h"
+
+#if defined(unix) || defined(__unix__) || defined(__unix)
+#define PLATFORM_UNIX
+#endif
 
 using namespace std;
 
@@ -88,10 +91,12 @@ linkedMap::~linkedMap() {
 bool linkedMap::getLoaded() {return loaded;}
 string linkedMap::getSource() {return source;}
 int linkedMap::getWidth() {
+    if(!topLeft || !topRight) return -1;
     return (topRight->getX() - topLeft->getX() + 1);
 }
 
 int linkedMap::getHeight() {
+    if(!topLeft || !bottomLeft) return -1;
     return (bottomLeft->getY() - topLeft->getY() + 1);
 }
 
@@ -140,11 +145,15 @@ char linkedMap::getTile(unsigned short x, unsigned short y) {
 
 void linkedMap::getNextLine(ifstream & file, string & line) {
     getline(file, line);
+
+#if defined(PLATFORM_UNIX)
     if(line.length() > 0) {
         if(line[line.length() - 1] == '\r') {
             line.pop_back();
         }
     }
+#endif
+
 }
 
 bool linkedMap::loadMap(const string & src) {
@@ -287,8 +296,8 @@ void linkedMap::print() {
 
 linkedMap & linkedMap::operator=(const linkedMap & rhs) {
     if(this == &rhs) return *this;
-    source = rhs.source;
     unloadMap();
+    source = rhs.source;
 
     if(!rhs.loaded) return *this;
 

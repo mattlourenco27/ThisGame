@@ -6,6 +6,7 @@
 #define THISGAME_MAPPAINTER_H
 
 #include "linkedMap.h"
+#define DEFAULT_FILE_NAME "out_file.txt"
 
 class mapPainter: public linkedMap {
 protected:
@@ -14,6 +15,7 @@ public:
     //Constructors & Destructor
     mapPainter();
     explicit mapPainter(const string & src);
+    mapPainter(unsigned short _width, unsigned short _height);
     mapPainter(const mapPainter & src);
     ~mapPainter() override;
 
@@ -30,7 +32,7 @@ public:
     bool drawPoint(unsigned short x, unsigned short y, char fill);
 
     void newMap();
-    bool save(string dest);
+    bool save(const string & dest);
     bool save();
 
     //Operator overloads
