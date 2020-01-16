@@ -281,5 +281,11 @@ void mapPainter::print() {
         cout << endl;
         p = row;
     }
+}
 
+mapPainter & mapPainter::operator=(const mapPainter & rhs) {
+    if(this == &rhs) return *this;
+    linkedMap::operator=(rhs);
+    destination = rhs.destination;
+    return *this;
 }
