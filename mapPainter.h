@@ -27,6 +27,8 @@ public:
     bool setHeight(unsigned short _height);
 
     //Utility methods
+    //Draws a rectangle across (x1, y1) and (x2, y2)
+    //The following must be true (x1 <= x2 AND y1 <= y2)
     bool drawRect(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2,
                   char fill, bool hollow = false);
     bool drawLine(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, char fill);

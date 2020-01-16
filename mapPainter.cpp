@@ -157,15 +157,15 @@ bool mapPainter::drawRect(unsigned short x1, unsigned short y1,
             p = p->getTop();
             p->setTile(fill);
         }
-        while(p->getY() > x1) {
+        while(p->getX() > x1) {
             p = p->getLeft();
             p->setTile(fill);
         }
     } else { //travel column by column
         tileNode *topC; //Top of current column
-        while(p->getX() <= x2) {
+        while(p && p->getX() <= x2) {
             topC = p;
-            while(p->getY() <= y2) {
+            while(p && p->getY() <= y2) {
                 p->setTile(fill);
                 p = p->getBottom();
             }

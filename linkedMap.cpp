@@ -127,7 +127,7 @@ tileNode *linkedMap::getNodeFrom(unsigned short x, unsigned short y, tileNode *s
 
     tileNode *p = start;
 
-    while(p->getX() != x && p->getY() != y) {
+    while(p->getX() != x || p->getY() != y) {
         if(p->getX() > x) p = p->getLeft();
         else if(p->getX() < x) p = p->getRight();
         if(p->getY() > y) p = p->getTop();
