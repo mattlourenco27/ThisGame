@@ -20,5 +20,9 @@ int main() {
     painter.setHeight(50);
     painter.save();
 
+    painter.setWidth(40);
+    painter.setHeight(20);
+    painter.save("../maps/testmap1.2.txt");
+
     return 0;
 }
