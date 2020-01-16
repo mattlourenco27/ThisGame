@@ -129,6 +129,7 @@ bool mapPainter::setHeight(unsigned short _height) {
     return true;
 }
 
+//Draw a rectangle on the grid with given corner points. Can be hollow
 bool mapPainter::drawRect(unsigned short x1, unsigned short y1,
                           unsigned short x2, unsigned short y2,
                           char fill, bool hollow) {
@@ -172,6 +173,7 @@ bool mapPainter::drawRect(unsigned short x1, unsigned short y1,
     return true;
 }
 
+//Draw a continuous line on the map
 bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, char fill) {
     if(x1 >= getWidth() || y1 >= getHeight() ||
        x2 >= getWidth() || y2 >= getHeight()) return false;
@@ -215,6 +217,7 @@ bool mapPainter::drawLine(unsigned short x1, unsigned short y1, unsigned short x
     return true;
 }
 
+//Draw one tile on the map
 bool mapPainter::drawPoint(unsigned short x, unsigned short y, char fill) {
     if(x >= getWidth() || y >= getHeight()) return false;
     tileNode *p = getNode(x, y);
@@ -223,12 +226,14 @@ bool mapPainter::drawPoint(unsigned short x, unsigned short y, char fill) {
     return true;
 }
 
+//Save current map, unload, and create a new one
 void mapPainter::newMap() {
     if(getLoaded()) save();
     unloadMap();
     destination = "";
 }
 
+//Save the map to dest
 bool mapPainter::save(const string & dest) {
     ofstream of(dest, ofstream::trunc); //Open the destination file and remove any previous contents
     if(!of.is_open()) return false;
@@ -254,7 +259,27 @@ bool mapPainter::save(const string & dest) {
     return true;
 }
 
+//Saves the map to destination. if destination is not set, set the destination as the default destination
 bool mapPainter::save() {
     if(destination.empty()) destination = string("../maps/") + DEFAULT_FILE_NAME;
     return save(destination);
+}
+
+void mapPainter::print() {
+    if(!getLoaded()) cout << "Map is not loaded" << endl;
+    cout << "Source: " << getSource() << endl;
+    cout << "Destination: " << destination << endl;
+
+    tileNode *p = topLeft;
+    tileNode *row = topLeft;
+    while(row) {
+        row = row->getBottom();
+        while(p) {
+            cout << *p;
+            p = p->getRight();
+        }
+        cout << endl;
+        p = row;
+    }
+
 }

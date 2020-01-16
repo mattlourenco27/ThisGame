@@ -34,6 +34,7 @@ public:
     void newMap();
     bool save(const string & dest);
     bool save();
+    void print() override;
 
     //Operator overloads
     mapPainter & operator=(const mapPainter & rhs);
