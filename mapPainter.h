@@ -6,6 +6,7 @@
 #define THISGAME_MAPPAINTER_H
 
 #include "linkedMap.h"
+#include "arrayMap.h"
 #define DEFAULT_FILE_NAME "out_file.txt"
 
 class mapPainter: public linkedMap {
@@ -35,6 +36,9 @@ public:
     bool save(const string & dest);
     bool save();
     void print() override;
+
+    //Conversion
+    arrayMap toArrayMap();
 
     //Operator overloads
     mapPainter & operator=(const mapPainter & rhs);

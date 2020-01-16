@@ -17,10 +17,10 @@
 class linkedMap {
 private:
     string source;
-    bool loaded;
     void getNextLine(ifstream & file, string & line);
 
 protected:
+    bool loaded;
     tileNode *topLeft;
     tileNode *topRight;
     tileNode *bottomLeft;

@@ -6,9 +6,9 @@
 #include <fstream>
 #include "mapPainter.h"
 
-#if defined(unix) || defined(__unix__) || defined(__unix)
-#define PLATFORM_UNIX
-#endif
+//#if defined(unix) || defined(__unix__) || defined(__unix)
+//#define PLATFORM_UNIX
+//#endif
 
 //Constructors & Destructor
 mapPainter::mapPainter():linkedMap() {
@@ -42,11 +42,12 @@ bool mapPainter::setWidth(unsigned short _width) {
     if(_width > MAX_X) return false;
     if(_width < 1) return false;
 
-    if(!getLoaded()) {
+    if(!loaded) {
         topLeft = new tileNode(0, 0);
         topRight = topLeft;
         bottomLeft = topLeft;
         bottomRight = topLeft;
+        loaded = true;
     }
 
     //Determine if columns must be added or subtracted
@@ -88,11 +89,12 @@ bool mapPainter::setHeight(unsigned short _height) {
     if(_height > MAX_Y) return false;
     if(_height < 1) return false;
 
-    if(!getLoaded()) {
+    if(!loaded) {
         topLeft = new tileNode(0, 0);
         topRight = topLeft;
         bottomLeft = topLeft;
         bottomRight = topLeft;
+        loaded = true;
     }
 
     //Determine if rows must be added or subtracted
@@ -228,7 +230,7 @@ bool mapPainter::drawPoint(unsigned short x, unsigned short y, char fill) {
 
 //Save current map, unload, and create a new one
 void mapPainter::newMap() {
-    if(getLoaded()) save();
+    if(loaded) save();
     unloadMap();
     destination = "";
 }
@@ -247,11 +249,7 @@ bool mapPainter::save(const string & dest) {
             of << p->getTile();
             p = p->getRight();
         }
-#if defined(_WIN32)
-        of << "\r\n";
-#elif defined(PLATFORM_UNIX)
-        of << "\n";
-#endif
+        if(row) of << endl;
         p = row;
     }
 
@@ -266,7 +264,7 @@ bool mapPainter::save() {
 }
 
 void mapPainter::print() {
-    if(!getLoaded()) cout << "Map is not loaded" << endl;
+    if(!loaded) cout << "Map is not loaded" << endl;
     cout << "Source: " << getSource() << endl;
     cout << "Destination: " << destination << endl;
 
@@ -281,6 +279,11 @@ void mapPainter::print() {
         cout << endl;
         p = row;
     }
+}
+
+arrayMap mapPainter::toArrayMap() {
+    save("../maps/intermediate.txt");
+    return arrayMap(destination);
 }
 
 mapPainter & mapPainter::operator=(const mapPainter & rhs) {
